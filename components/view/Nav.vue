@@ -16,7 +16,7 @@
       <v-app-bar-title>
         <div class="d-flex align-center justify-center" style="gap: 10px">
           <div>
-            Tienes 9999 <v-icon color="#dee600" size="small" >mdi-star</v-icon>
+            Tienes {{store.estrellas}} <v-icon color="#dee600" size="small" >mdi-star</v-icon>
           </div>
         </div>
       </v-app-bar-title>

@@ -179,3 +179,10 @@ export const firebase = {
     return {message: "success"}
   }
 }
+
+export const getTotalStars = async () => {
+  const data:any = await firebase.getOne({rute:"stars", id:"total-stars"});
+  const total = data?.total || 0
+  store.setEsrellas(total);
+  return total;
+}

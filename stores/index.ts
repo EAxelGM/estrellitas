@@ -1,11 +1,15 @@
 //import { defineStore } from 'pinia';
 export const useStore = defineStore('main', () => {
   const user = ref(null);
+  const estrellas = ref(0);
   const alertData = ref({});
 
   //Actions;
   const setUser = (data:any) => {
     user.value = data;
+  }
+  const setEstrellas = (data:any) => {
+    estrellas.value = data;
   }
   const setAlertData = ({message="Success", timedefault=2000, color="green"}) => {
     alertData.value = {
@@ -20,7 +24,10 @@ export const useStore = defineStore('main', () => {
     setUser,
 
     alertData,
-    setAlertData
+    setAlertData,
+
+    estrellas,
+    setEstrellas
   }
 });
 

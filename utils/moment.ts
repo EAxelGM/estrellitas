@@ -1,30 +1,26 @@
 import moment_ from 'moment';
-import 'moment/locale/es';
+import 'moment/dist/locale/es';
 
-moment_.updateLocale('es', {
-  relativeTime: {
-    future: 'en %s',
-    past: 'hace %s',
-    s: function (number, withoutSuffix, key, isFuture) {
-      return '00:' + (number < 10 ? '0' : '') + number + ' minutos';
-    },
-    m: '01:00 minutos',
-    mm: function (number, withoutSuffix, key, isFuture) {
-      return (number < 10 ? '0' : '') + number + ':00' + ' minutos';
-    },
-    h: 'una hora',
-    hh: '%d horas',
-    d: 'un día',
-    dd: '%d días',
-    M: 'un mes',
-    MM: '%d meses',
-    y: 'un año',
-    yy: '%d años',
-  },
-});
+moment_.locale("es")
 
 export const moment = moment_;
 
-export const momentPrettyDate = (date: any) => moment(date).format('DD [de] MMMM [del] YYYY ');
+export const momentPrettyDate = (date: any) => {
+  if(date){
+    if(moment(date).isValid()){
+      return moment(date).format('DD [de] MMMM [del] YYYY ')
+    }
+  }
+  return "sin fecha"
+}
+
+export const momentPrettyFullDate = (date: any) =>{
+  if(date){
+    if(moment(date).isValid()){
+      return moment(date).format('DD [de] MMMM [del] YYYY [a las] HH:mm:ss ');
+    }
+  }
+  return "sin fecha"
+}
 
 export const getYear = moment().format('YYYY');
