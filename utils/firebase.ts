@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDoc, getDocs, updateDoc, deleteDoc, query, where, setDoc } from "firebase/firestore";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import moment from "moment";
 import * as keys from "../configs/keys"
 
@@ -23,9 +24,13 @@ const app = initializeApp(firebaseConfig);
 
 // Obtener una instancia de Firestore
 const firestore = getFirestore(app);
-
 // Obtiene una instancia del objeto de autenticación de Firebase
 const auth = getAuth();
+
+const storage = getStorage();
+const metadata = {
+  contentType: 'image/jpeg'
+};
 
 export const firebase = {
   getData: async ({ rute = "" }) => {
@@ -177,12 +182,73 @@ export const firebase = {
     }
 
     return {message: "success"}
+  },
+
+  uploadFiles: async (file:any, path="images") => {
+    const fechaActualUnix = Math.floor(Date.now() / 1000);
+    const rute = `${path}/${fechaActualUnix}`
+    const storageRef = ref(storage, rute);
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+    return new Promise((resolve, reject) => {
+      uploadTask.on('state_changed', (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      },
+      (error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            break;
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
+
+          // ...
+
+          case 'storage/unknown':
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+        }
+      },
+      async () => {
+        // Upload completed successfully, now we can get the download URL
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log('File available at', downloadURL);
+          resolve(downloadURL);
+        } catch (error) {
+          reject(error);
+        }
+      })
+    })
   }
 }
 
 export const getTotalStars = async () => {
   const data:any = await firebase.getOne({rute:"stars", id:"total-stars"});
   const total = data?.total || 0
-  store.setEsrellas(total);
+  store.setEstrellas(total);
   return total;
+}
+
+export const unLessStars = async (quantity: any) => {
+  const data:any = await firebase.getOne({rute:"stars", id:"total-stars"});
+  const total = data?.total || 0
+  const newTotal = total - parseInt(`${quantity}`);
+  const updated = await firebase.createWithIdEspecific({rute:"stars", id:"total-stars", data: {
+    total: newTotal
+  }});
+  store.setEstrellas(newTotal);
+  return newTotal;
 }

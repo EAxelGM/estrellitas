@@ -65,7 +65,7 @@ const darEstrellas = async () => {
   try {
     const data = await firebase.create({rute:"history_stars", data:formulario_dar_estrellas.value});
     const totalStars = store.estrellas
-    const updateStars = await firebase.createWithIdEspecific({rute:"stars", id:"00_total_stars", data: {total: parseInt(`${totalStars}`)+parseInt(`${data.quantity}`)}})
+    const updateStars = await firebase.createWithIdEspecific({rute:"stars", id:"total-stars", data: {total: parseInt(`${totalStars}`)+parseInt(`${data.quantity}`)}})
     store.setEstrellas(updateStars?.total || 0)
     openModalDarEsrellas.value = false
     getHistorial();

@@ -21,7 +21,7 @@ import FondoEstrellas from "@/components/view/FondoEstrellas.vue";
 
 const getEstrellas = async () => {
   try {
-    const estrellas = await firebase.getOne({rute:"stars", id:"00_total_stars"})
+    const estrellas = await firebase.getOne({rute:"stars", id:"total-stars"})
     console.log({estrellas})
     store.setEstrellas(estrellas?.total || 0)
   } catch (error) {

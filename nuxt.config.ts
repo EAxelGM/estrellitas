@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Postman to Swagger',
+      title: 'Estrellitas',
       link: [
         { rel: 'icon', href: '/icon.png' },
         {
@@ -35,7 +35,7 @@ export default defineNuxtConfig({
         {
           hid: 'description',
           name: 'description',
-          content: 'Postman to Swagger 😎',
+          content: 'Estrellitas 😎',
         },
         { name: 'format-detection', content: 'telephone=no' },
       ],

@@ -8,7 +8,7 @@
         >
           <div align="center">
             <div>
-              <v-avatar :image="item.image" size="200"></v-avatar>
+              <v-avatar :image="item.image || 'images/no-foto.png'" size="200"></v-avatar>
             </div>
             <div>
               <h2>{{ item.name }}</h2>
@@ -20,18 +20,18 @@
 
               <div v-show="showDescription" class="font-description">
                 <div v-if="item.description">
-                  holis
+                  {{item.description}}
                 </div>
                 <div v-else>
                   No hay descripcion/restricciones
                 </div>
               </div>
             </div>
-            <div><v-icon color="yellow">mdi-star</v-icon> {{ item.stars }}</div>
+            <div><v-icon color="yellow">mdi-star</v-icon> {{ item.stars_cost }}</div>
 
             <div class="mt-5">
               <v-btn block color="yellow" variant="outlined" @click="modalConfirmation = !modalConfirmation">
-                Canjear estrellitas
+                Canjear
               </v-btn>
             </div>
           </div>
@@ -45,7 +45,7 @@
           <div align="center">
             <h4 class="mb-5">¿Estas segura de canjear tus estrellas?</h4>
             <div>
-              <v-avatar :image="item.image" size="150"></v-avatar>
+              <v-avatar :image="item.image || 'images/no-foto.png'" size="150"></v-avatar>
             </div>
             <div>
               <h2>{{ item.name }}</h2>
@@ -90,15 +90,22 @@ const loading = ref(false)
 const canjearEstrellas = async() => {
   loading.value = true
   try {
-    setTimeout(() => {
-      loading.value = false
-      modalConfirmation.value = false
-      store.setAlertData({message: "Canje exitoso!"})
-    },3000)
+    if(parseInt(`${item.stars_cost}`) > parseInt(`${store.estrellas}`)){
+      throw{message: "No tienes suficientes estrellas :("}
+    }
+
+    const newPurchase = await firebase.create({rute:"compras", data:{
+      used: false,
+      item_info: item
+    }})
+
+    await unLessStars(item.stars_cost)
+    modalConfirmation.value = false
+
   } catch (error) {
-    console.log({error})
+    responseErrors(error)
   }
-  //loading.value = false
+  loading.value = false
 }
 </script>
 

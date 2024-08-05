@@ -68,3 +68,7 @@ export const readFileAsync = async (file: any) => {
     reader.readAsText(file);
   });
 };
+
+export const contrasenaMaestra = () => {
+  return "karla-"
+}
