@@ -7,7 +7,21 @@
           <v-btn color="green" variant="outlined" @click="openModalDarEsrellas = !openModalDarEsrellas">
             Dar estrellas
           </v-btn>
-        </div>
+      </div>
+        <v-responsive class="pa-4" max-height="400" >
+          <div v-for="(hist, index) in historial" :key="index">
+            <div>
+              <v-card class="pa-4 mb-5">
+                <div>
+                  diste {{ hist.quantity }} estrellas, por esta razon: {{ hist.description }}
+                  <div class="d-flex justify-end">
+                    <small>Fecha: {{ momentPrettyFullDate(hist.created_at) }}</small>
+                  </div>
+                </div>
+              </v-card>
+            </div>
+          </div>
+        </v-responsive>
       </div>
     </v-card>
 
@@ -33,11 +47,6 @@
                 </v-btn>
               </v-col>
             </v-row>
-          </div>
-          <div>
-            <div v-for="(history, index) in historial" :key="index">
-              {{ history }}
-            </div>
           </div>
         </div>
       </v-card>
@@ -69,7 +78,9 @@ const darEstrellas = async () => {
 const getHistorial = async () => {
   try {
     const history = await firebase.getData({rute: "history_stars"});
-    historial.value = history
+    historial.value = history.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    )
   } catch (error) {
     responseErrors(error)
   }
