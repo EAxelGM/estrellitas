@@ -1,0 +1,40 @@
+a {
+  text-decoration: none;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.v-btn {
+  text-transform: none !important;
+  border-radius: 20px !important
+}
+
+.v-card {
+  border-radius: 20px !important;
+}
+
+.v-application {
+  background: #00000000 !important;
+}
+
+.card-item-hover {
+  background: #000000aa !important;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
+
+}
+.card-item {
+  background: #00000050 !important;
+  transition: background 0.3s, box-shadow 0.3s; /* Añadir transición suave */
+}
+
+.font-description {
+  font-size: 12px;
+  background-color: #39393937;
+  padding: 5px;
+  border-radius: 15px;
+}
